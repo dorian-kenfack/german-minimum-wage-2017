@@ -1,6 +1,6 @@
 AMR_2013_Proxy_Bonin.csv
 
-Basis: AMR_2013_Proxy.csv. All existing variables and values remain unchanged.
+Based on: AMR_2013_Proxy.csv. All existing variables and values remain unchanged.
 
 Added variable: mw_luecke from the user-provided mlkamrpanel.csv
 located in the replication folder. The datasets are merged exclusively
@@ -16,8 +16,6 @@ The original scale is preserved; no conversion to percentages was applied.
 Important: The wage proxy refers to December 31, 2013.
 mw_luecke is Bonin et al.'s 2014 wage gap used for the proxy validation.
 It is not a newly calculated wage gap for 2013.
-
-Details on the wage definition and weighting procedure are provided in README_2013.txt.
 
 CSV format: UTF-8, comma-separated, decimal point.
 

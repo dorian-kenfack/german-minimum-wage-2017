@@ -1,25 +1,9 @@
-AMR_2013_Proxy_Bonin.csv
+# AMR_2013_Proxy_Bonin.csv
 
-Based on: AMR_2013_Proxy.csv. All existing variables and values remain unchanged.
+This dataset combines the 2013 regional wage proxy with the original 2014 regional wage gap from Bonin et al. (2020).
 
-Added variable: mw_luecke from the user-provided mlkamrpanel.csv
-located in the replication folder. The datasets are merged exclusively
-using the numeric AMR identifier amr.
+The dataset contains one observation for each of the 257 German labor market regions (AMRs). The wage proxy is based on pre-treatment wage information from 2013, while `mw_luecke` contains Bonin et al.'s 2014 wage-gap measure used for the historical validation of the proxy.
 
-257 regions, one observation per AMR, no missing values, and no regions removed.
+The original scale of the wage-gap measure is preserved.
 
-mw_luecke is constant within each AMR across all panel periods.
-For each region, this constant value was retained once rather than averaged over time.
-
-The original scale is preserved; no conversion to percentages was applied.
-
-Important: The wage proxy refers to December 31, 2013.
-mw_luecke is Bonin et al.'s 2014 wage gap used for the proxy validation.
-It is not a newly calculated wage gap for 2013.
-
-CSV format: UTF-8, comma-separated, decimal point.
-
-proxy_2013 <- read.csv(
-  "AMR_2013_Proxy_Bonin.csv",
-  fileEncoding = "UTF-8"
-)
+This dataset is used exclusively for the validation of the wage-based exposure proxy in the main analysis.

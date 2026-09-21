@@ -52,4 +52,4 @@ All employment outcomes are person counts rather than counts of employment relat
 | `log_geb_total` | Log of `geb_total` |
 | `log_geb_ausschl` | Log of `geb_ausschl` |
 | `log_svgeb_total` | Log of `svgeb_total` |
-| `log_abs_total` | Log of `al_abs_insg_tot` |
+| `log_abs_total` | Log of `abs_tot` |

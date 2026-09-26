@@ -298,9 +298,11 @@ raw data, intermediate files, code, and generated figures.
 ├── README.md
 ├── README.Rmd
 ├── data_dictionary.md
+├── data_sources.md
 │
 ├── code/
-│   └── analysis.R
+│   ├── analysis.R
+│   └── functions.R
 │
 ├── data/
 │   ├── final/
@@ -332,6 +334,12 @@ raw data, intermediate files, code, and generated figures.
     ├── eventstudy_total_employment.png
     └── eventstudy_unemployment.png
 ```
+
+`analysis.R` contains the full empirical workflow, including data
+preparation, model estimation, diagnostics, and result generation.
+Reusable helper functions for plotting and repeated diagnostic
+procedures are stored separately in `functions.R` to keep the main
+analysis script concise and transparent.
 
 The `data/final/` directory contains the two datasets used directly in
 the final analysis. `Regression_AMR_2015_2018_Final.csv` contains the
@@ -370,6 +378,10 @@ To reproduce the results:
 ``` r
 source("code/analysis.R") 
 ```
+
+The main script automatically loads the reusable helper functions
+contained in `code/functions.R`, so no additional script needs to be run
+separately.
 
 The script reads:
 

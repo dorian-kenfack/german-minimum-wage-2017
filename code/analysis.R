@@ -29,7 +29,7 @@ proxy_2013_linear <- lm(
   data = proxy_2013
 )
 
-summary(proxy_2013_linear)
+print(summary(proxy_2013_linear))
 
 # Quadratic relationship
 proxy_2013_quadratic <- lm(
@@ -38,9 +38,17 @@ proxy_2013_quadratic <- lm(
   data = proxy_2013
 )
 
-summary(proxy_2013_quadratic)
+print(summary(proxy_2013_quadratic))
 
 # Plot quadratic relationship
+
+png(
+  "figures/proxy_validation.png",
+  width = 1600,
+  height = 1000,
+  res = 150
+)
+
 plot(
   proxy_2013$gewichteter_kreismedian_eur,
   proxy_2013$mw_luecke,
@@ -69,6 +77,8 @@ lines(
   lwd = 2
 )
 
+dev.off()
+
 ###############################################
 # 2. Prepare Variables and Analysis Samples
 ###############################################
@@ -80,7 +90,7 @@ lines(
 # treatment = 0: Wage proxy is at or above the median,
 # corresponding to lower expected minimum-wage exposure.
 
-m <- median(unique(panel_data$amr_proxy))
+m <- median(panel_data$amr_proxy)
 
 panel_data$treatment <- ifelse(
   panel_data$amr_proxy < m,
@@ -89,10 +99,7 @@ panel_data$treatment <- ifelse(
 )
 
 
-## 2.2 Time variables
-
-# Annual trend
-panel_data$trend_year <- panel_data$year - 2015
+## 2.2 Quarterly trend
 
 quarter_levels <- c(
   "Q1/2015", "Q2/2015", "Q3/2015", "Q4/2015",
@@ -106,7 +113,6 @@ panel_data$timeQ <- factor(
   levels = quarter_levels
 )
 
-# Quarterly trend
 panel_data$trend_quarter <- as.numeric(panel_data$timeQ) - 1
 
 
@@ -205,7 +211,7 @@ legend(
   legend = c(
     "Control group (lower exposure)",
     "Treatment group (higher exposure)",
-    "Minimum-wage increase passed (Q3/2016)",
+    "Treatment period begins (Q3/2016)",
     "Minimum-wage increase implemented (Q1/2017)"
   ),
   pch = c(1, 16, NA, NA),
@@ -247,7 +253,7 @@ panelA.2 <- feols(
 )
 
 panelA.3 <- feols(
-  log_svb_total ~ treatment:post16 + pop_share_1864_2015:trend_year  | amr + timeQ + east^timeQ,
+  log_svb_total ~ treatment:post16 + pop_share_1864_2015:trend_quarter  | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -255,11 +261,11 @@ panelA.3 <- feols(
 
 panelA.4 <- feols(
   log_svb_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -267,11 +273,11 @@ panelA.4 <- feols(
 
 panelA.5 <- feols(
   log_svb_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = trimmed_sample
@@ -294,7 +300,7 @@ panelB.2 <- feols(
 )
 
 panelB.3 <- feols(
-  log_geb_total ~ treatment:post16 + pop_share_1864_2015:trend_year  | amr + timeQ + east^timeQ,
+  log_geb_total ~ treatment:post16 + pop_share_1864_2015:trend_quarter  | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -302,11 +308,11 @@ panelB.3 <- feols(
 
 panelB.4 <- feols(
   log_geb_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -314,11 +320,11 @@ panelB.4 <- feols(
 
 panelB.5 <- feols(
   log_geb_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = trimmed_sample
@@ -341,7 +347,7 @@ panelC.2 <- feols(
 )
 
 panelC.3 <- feols(
-  log_geb_ausschl ~ treatment:post16 + pop_share_1864_2015:trend_year  | amr + timeQ + east^timeQ,
+  log_geb_ausschl ~ treatment:post16 + pop_share_1864_2015:trend_quarter  | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -349,11 +355,11 @@ panelC.3 <- feols(
 
 panelC.4 <- feols(
   log_geb_ausschl ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -361,11 +367,11 @@ panelC.4 <- feols(
 
 panelC.5 <- feols(
   log_geb_ausschl ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = trimmed_sample
@@ -388,7 +394,7 @@ panelD.2 <- feols(
 )
 
 panelD.3 <- feols(
-  log_svgeb_total ~ treatment:post16 + pop_share_1864_2015:trend_year  | amr + timeQ + east^timeQ,
+  log_svgeb_total ~ treatment:post16 + pop_share_1864_2015:trend_quarter  | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -396,11 +402,11 @@ panelD.3 <- feols(
 
 panelD.4 <- feols(
   log_svgeb_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -408,11 +414,11 @@ panelD.4 <- feols(
 
 panelD.5 <- feols(
   log_svgeb_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = trimmed_sample
@@ -435,7 +441,7 @@ panelE.2 <- feols(
 )
 
 panelE.3 <- feols(
-  log_abs_total ~ treatment:post16 + pop_share_1864_2015:trend_year  | amr + timeQ + east^timeQ,
+  log_abs_total ~ treatment:post16 + pop_share_1864_2015:trend_quarter  | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -443,11 +449,11 @@ panelE.3 <- feols(
 
 panelE.4 <- feols(
   log_abs_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -455,11 +461,11 @@ panelE.4 <- feols(
 
 panelE.5 <- feols(
   log_abs_total ~ treatment:post16 
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = trimmed_sample
@@ -477,11 +483,11 @@ panelE.5 <- feols(
 
 event_A <- feols(
   log_svb_total ~ i(timeQ, treatment, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year 
-  + empl_share_trade_2015:trend_year 
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter 
+  + empl_share_trade_2015:trend_quarter 
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -491,11 +497,11 @@ event_A <- feols(
 
 event_B <- feols(
   log_geb_total ~ i(timeQ, treatment, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year 
-  + empl_share_trade_2015:trend_year 
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter 
+  + empl_share_trade_2015:trend_quarter 
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -505,11 +511,11 @@ event_B <- feols(
 
 event_C <- feols(
   log_geb_ausschl ~ i(timeQ, treatment, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year 
-  + empl_share_trade_2015:trend_year 
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter 
+  + empl_share_trade_2015:trend_quarter 
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -519,11 +525,11 @@ event_C <- feols(
 
 event_D <- feols(
   log_svgeb_total ~ i(timeQ, treatment, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year 
-  + empl_share_trade_2015:trend_year 
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter 
+  + empl_share_trade_2015:trend_quarter 
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
@@ -533,15 +539,18 @@ event_D <- feols(
 
 event_E <- feols(
   log_abs_total ~ i(timeQ, treatment, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year 
-  + empl_share_trade_2015:trend_year 
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter 
+  + empl_share_trade_2015:trend_quarter 
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
 )
+
+print(etable(event_A, event_B, event_C, event_D, event_E,
+             keep_raw = "^timeQ::", digits = 4))
 
 ###############################################
 # 6. Binary Model: Pre-Trend Diagnostics
@@ -563,23 +572,23 @@ leave_out_results_A <- leave_one_out_wald(
   pre_quarters
 )
 
-leave_out_results_A
+print(leave_out_results_A)
 
 # Linearer Pre-trend test
 
 pretrend_A <- feols(
   log_svb_total ~ treatment:trend_quarter
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(pretrend_A)
+print(pretrend_A)
 
 
 ## Panel B: Marginal employment
@@ -598,23 +607,23 @@ leave_out_results_B <- leave_one_out_wald(
   pre_quarters
 )
 
-leave_out_results_B
+print(leave_out_results_B)
 
 # Linearer Pre-trend test
 
 pretrend_B <- feols(
   log_geb_total ~ treatment:trend_quarter
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(pretrend_B)
+print(pretrend_B)
 
 
 ## Panel C: Exclusive marginal employment
@@ -632,24 +641,24 @@ leave_out_results_C <- leave_one_out_wald(
   event_C,
   pre_quarters
 )
-
-leave_out_results_C
+ 
+print(leave_out_results_C)
 
 # Linearer Pre-trend test
 
 pretrend_C <- feols(
   log_geb_ausschl ~ treatment:trend_quarter
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(pretrend_C)
+print(pretrend_C)
 
 
 ## Panel D: Total employment
@@ -667,24 +676,24 @@ leave_out_results_D <- leave_one_out_wald(
   event_D,
   pre_quarters
 )
-
-leave_out_results_D
+ 
+print(leave_out_results_D)
 
 # Linearer Pre-trend test
 
 pretrend_D <- feols(
   log_svgeb_total ~ treatment:trend_quarter
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(pretrend_D)
+print(summary(pretrend_D))
 
 
 ## Panel E: Unemployment
@@ -702,24 +711,24 @@ leave_out_results_E <- leave_one_out_wald(
   event_E,
   pre_quarters
 )
-
-leave_out_results_E
+ 
+print(leave_out_results_E)
 
 # Linearer Pre-trend test
 
 pretrend_E <- feols(
   log_abs_total ~ treatment:trend_quarter
-  + pop_share_1864_2015:trend_year 
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year | amr + timeQ + east^timeQ,
+  + pop_share_1864_2015:trend_quarter 
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter | amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(pretrend_E)
+print(summary(pretrend_E))
 
 
 ###############################################
@@ -735,11 +744,11 @@ summary(pretrend_E)
 
 c_did_A <- feols(
   log_svb_total ~ exposure_proxy:post16
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -751,11 +760,11 @@ c_did_A <- feols(
 
 c_did_B <- feols(
   log_geb_total ~ exposure_proxy:post16
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -767,11 +776,11 @@ c_did_B <- feols(
 
 c_did_C <- feols(
   log_geb_ausschl ~ exposure_proxy:post16
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -783,11 +792,11 @@ c_did_C <- feols(
 
 c_did_D <- feols(
   log_svgeb_total ~ exposure_proxy:post16
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -799,17 +808,19 @@ c_did_D <- feols(
 
 c_did_E <- feols(
   log_abs_total ~ exposure_proxy:post16
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
 )
 
+print(etable(c_did_A, c_did_B, c_did_C, c_did_D, c_did_E,
+             keep_raw = "exposure_proxy:post16", digits = 4))
 
 ###############################################
 # 8. Continuous Event-Study Models
@@ -825,11 +836,11 @@ c_did_E <- feols(
 
 c_event_A <- feols(
   log_svb_total ~ i(timeQ, exposure_proxy, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -841,11 +852,11 @@ c_event_A <- feols(
 
 c_event_B <- feols(
   log_geb_total ~ i(timeQ, exposure_proxy, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -857,11 +868,11 @@ c_event_B <- feols(
 
 c_event_C <- feols(
   log_geb_ausschl ~ i(timeQ, exposure_proxy, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -873,11 +884,11 @@ c_event_C <- feols(
 
 c_event_D <- feols(
   log_svgeb_total ~ i(timeQ, exposure_proxy, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
@@ -889,17 +900,19 @@ c_event_D <- feols(
 
 c_event_E <- feols(
   log_abs_total ~ i(timeQ, exposure_proxy, ref = "Q2/2016")
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = panel_data
 )
 
+print(etable(c_event_A, c_event_B, c_event_C, c_event_D, c_event_E,
+             keep_raw = "^timeQ::", digits = 4))
 
 ###############################################
 # 9. Continuous Model: Pre-Trend Diagnostics
@@ -919,23 +932,23 @@ leave_out_results_cA <- leave_one_out_wald(
   pre_quarters
 )
 
-leave_out_results_cA
+print(leave_out_results_cA)
 
 # Linear pre-trend test
 c_pretrend_A <- feols(
   log_svb_total ~ exposure_proxy:trend_quarter
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(c_pretrend_A)
+print(summary(c_pretrend_A))
 
 
 ## Panel B: Marginal employment
@@ -949,23 +962,23 @@ leave_out_results_cB <- leave_one_out_wald(
   pre_quarters
 )
 
-leave_out_results_cB
+print(leave_out_results_cB)
 
 # Linear pre-trend test
 c_pretrend_B <- feols(
   log_geb_total ~ exposure_proxy:trend_quarter
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(c_pretrend_B)
+print(summary(c_pretrend_B))
 
 
 ## Panel C: Exclusive marginal employment
@@ -982,23 +995,23 @@ leave_out_results_cC <- leave_one_out_wald(
   pre_quarters
 )
 
-leave_out_results_cC
+print(leave_out_results_cC)
 
 # Linear pre-trend test
 c_pretrend_C <- feols(
   log_geb_ausschl ~ exposure_proxy:trend_quarter
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(c_pretrend_C)
+print(summary(c_pretrend_C))
 
 
 ## Panel D: Total employment
@@ -1015,23 +1028,23 @@ leave_out_results_cD <- leave_one_out_wald(
   pre_quarters
 )
 
-leave_out_results_cD
+print(leave_out_results_cD)
 
 # Linear pre-trend test
 c_pretrend_D <- feols(
   log_svgeb_total ~ exposure_proxy:trend_quarter
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(c_pretrend_D)
+print(summary(c_pretrend_D))
 
 
 ## Panel E: Unemployment
@@ -1048,22 +1061,22 @@ leave_out_results_cE <- leave_one_out_wald(
   pre_quarters
 )
 
-leave_out_results_cE
+print(leave_out_results_cE)
 
 c_pretrend_E <- feols(
   log_abs_total ~ exposure_proxy:trend_quarter
-  + pop_share_1864_2015:trend_year
-  + empl_share_agric_2015:trend_year
-  + empl_share_trade_2015:trend_year
-  + empl_share_finan_2015:trend_year
-  + empl_share_publ_2015:trend_year |
+  + pop_share_1864_2015:trend_quarter
+  + empl_share_agric_2015:trend_quarter
+  + empl_share_trade_2015:trend_quarter
+  + empl_share_finan_2015:trend_quarter
+  + empl_share_publ_2015:trend_quarter |
     amr + timeQ + east^timeQ,
   weights = ~weight_pop15,
   cluster = ~amr,
   data = pre_panel_data
 )
 
-summary(c_pretrend_E)
+print(summary(c_pretrend_E))
 
 
 ###############################################
@@ -1099,7 +1112,7 @@ table_notes <- c(
 
 ## Panel A: Regular employment
 
-etable(
+print(etable(
   panelA.1, panelA.2, panelA.3, panelA.4, panelA.5,
   se.below = TRUE,
   digits = 4,
@@ -1109,12 +1122,12 @@ etable(
   extralines = specification_rows,
   drop.section = "fixef",
   notes = table_notes
-)
+))
 
 
 ## Panel B: Marginal employment
 
-etable(
+print(etable(
   panelB.1, panelB.2, panelB.3, panelB.4, panelB.5,
   se.below = TRUE,
   digits = 4,
@@ -1124,12 +1137,12 @@ etable(
   extralines = specification_rows,
   drop.section = "fixef",
   notes = table_notes
-)
+))
 
 
 ## Panel C: Exclusive marginal employment
 
-etable(
+print(etable(
   panelC.1, panelC.2, panelC.3, panelC.4, panelC.5,
   se.below = TRUE,
   digits = 4,
@@ -1139,12 +1152,12 @@ etable(
   extralines = specification_rows,
   drop.section = "fixef",
   notes = table_notes
-)
+))
 
 
 ## Panel D: Total employment
 
-etable(
+print(etable(
   panelD.1, panelD.2, panelD.3, panelD.4, panelD.5,
   se.below = TRUE,
   digits = 4,
@@ -1154,12 +1167,12 @@ etable(
   extralines = specification_rows,
   drop.section = "fixef",
   notes = table_notes
-)
+))
 
 
 ## Panel E: Unemployment
 
-etable(
+print(etable(
   panelE.1, panelE.2, panelE.3, panelE.4, panelE.5,
   se.below = TRUE,
   digits = 4,
@@ -1169,7 +1182,7 @@ etable(
   extralines = specification_rows,
   drop.section = "fixef",
   notes = table_notes
-)
+))
 
 
 ## 10.2 Compact results table
@@ -1253,15 +1266,10 @@ results$Continuous_DiD <- sprintf(
   results$Continuous_SE
 )
 
-names(results) <- c("Outcome", "Binary DiD", "Continuous DiD")
+final_table <- results[, c("Outcome", "Binary_DiD", "Continuous_DiD")]
+names(final_table) <- c("Outcome", "Binary DiD", "Continuous DiD")
+print(final_table)
 
-final_table <- results[, c(
-  "Outcome",
-  "Binary DiD",
-  "Continuous DiD"
-)]
-
-final_table
 
 ## 10.3 Individual continuous event-study plots
 

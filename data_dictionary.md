@@ -47,7 +47,7 @@ All employment outcomes are person counts rather than counts of employment relat
 | `geb_total` | Persons in marginal employment, including both exclusively marginally employed persons and persons with marginal employment as a secondary job |
 | `geb_ausschl` | Persons exclusively in marginal employment |
 | `svgeb_total` | Total persons in regular or exclusively marginal employment |
-| `abs_tot` | Total number of registered unemployed persons |
+| `abs_total` | Total number of registered unemployed persons |
 | `log_svb_total` | Log of `svb_total` |
 | `log_geb_total` | Log of `geb_total` |
 | `log_geb_ausschl` | Log of `geb_ausschl` |

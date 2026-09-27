@@ -4,17 +4,15 @@
 ## 1. Research Question
 
 This project examines regional labor market developments around the 2017
-increase in the German statutory minimum wage. Building on the empirical
-strategy of Bonin et al. (2020), I investigate whether regions with
+increase in the German statutory minimum wage. Building on my
+replication of Bonin et al. (2020), I investigate whether regions with
 higher expected minimum-wage exposure experienced different
 post-treatment developments in employment and unemployment outcomes.
 
-This project builds on a prior replication of Bonin et al. (2020), which
-I used to understand and validate the original empirical design. That
-replication served as the methodological starting point for the present
-extension to the 2017 minimum-wage increase. The replication itself is
-not part of this repository. This repository contains the independent
-extension and its associated data, code, and results.
+The replication is available in a [separate
+repository](https://github.com/dorian-kenfack/german-minimum-wage-replication).
+This repository contains the independent extension and its associated
+data, code, and results.
 
 ## 2. Data
 
@@ -82,6 +80,9 @@ reverse the sign of the proxy and rescale it into €100 units:
 Thus, a one-unit increase in exposure_proxy corresponds to a €100 lower
 pre-treatment median wage indicator and therefore to higher expected
 minimum-wage exposure.
+
+[View the historical validation of the wage-based exposure
+proxy](figures/proxy_validation.png).
 
 ## 4. Empirical Strategy
 
@@ -155,7 +156,7 @@ exposure_proxy.
 
 - Standard errors clustered at the AMR level
 
-*Control trends.* The preferred specification includes linear annual
+*Control trends.* The preferred specification includes linear quarterly
 trends interacted with fixed pre-treatment regional characteristics
 measured in 2015, including population structure and sectoral employment
 shares. Using pre-treatment values ensures that these controls capture
@@ -187,8 +188,11 @@ across outcomes. The joint Wald tests reject the null hypothesis of
 jointly zero pre-treatment coefficients for all five outcomes. The null
 hypothesis is also rejected in every leave-one-out joint test,
 indicating that the pre-treatment differences are not driven by a single
-quarter. For some outcomes, the linear pre-trend tests additionally
-provide evidence of systematic differential pre-treatment trends.
+quarter. The linear pre-trend tests additionally reject the null of no
+differential pre-treatment trend for unemployment in the continuous
+specification at the 5% level. Weaker evidence is found for unemployment
+in the binary specification and total employment in the continuous
+specification, with rejections at the 10% but not the 5% level.
 
 Taken together, the diagnostics do not provide sufficient support for
 the parallel-trends assumption. The post-treatment estimates are
@@ -222,15 +226,15 @@ one-unit increase in exposure_proxy.
 
 | Outcome | Binary DiD | Continuous DiD |
 |:---|:---|:---|
-| Regular employment | -0.0030 (0.0034) | -0.0004 (0.0004) |
-| Marginal employment | -0.0039 (0.0036) | -0.0003 (0.0005) |
-| Exclusive marginal employment | -0.0044 (0.0031) | -0.0002 (0.0004) |
-| Total employment | -0.0038 (0.0032) | -0.0005 (0.0003) |
-| Unemployment | -0.0291\*\*\* (0.0080) | -0.0043\*\*\* (0.0012) |
+| Regular employment | -0.0029 (0.0034) | -0.0003 (0.0004) |
+| Marginal employment | -0.0035 (0.0035) | -0.0003 (0.0005) |
+| Exclusive marginal employment | -0.0027 (0.0031) | -0.0001 (0.0005) |
+| Total employment | -0.0035 (0.0031) | -0.0004 (0.0003) |
+| Unemployment | -0.0201\*\*\* (0.0073) | -0.0032\*\*\* (0.0012) |
 
 \* p \< 0.10, \*\* p \< 0.05, \*\*\* p \< 0.01.
 
-Notes: Standard errors in parentheses and clustered at the AMR level.
+*Notes:* Standard errors in parentheses and clustered at the AMR level.
 All models correspond to the preferred specification and are weighted by
 pre-treatment population. Binary estimates compare higher- and
 lower-exposure AMRs. Continuous estimates correspond to a one-unit
@@ -240,13 +244,14 @@ wage indicator.
 ### Interpretation
 
 The employment estimates are small and negative in both specifications,
-but none is statistically significant at the 5% level. For unemployment,
-both specifications indicate a statistically significant negative
-association: approximately 2.9% for higher-exposure regions relative to
-lower-exposure regions in the binary model, and approximately 0.43% per
-€100 lower pre-treatment wage indicator in the continuous model. Given
-the documented pre-treatment differences, these estimates should not be
-interpreted as causal effects of the minimum-wage increase.
+but none is statistically significant at conventional significance
+levels (10%, 5%, or 1%). For unemployment, both specifications indicate
+a statistically significant negative association: approximately 2% for
+higher-exposure regions relative to lower-exposure regions in the binary
+model, and approximately 0.32% per €100 lower pre-treatment wage
+indicator in the continuous model. Given the documented pre-treatment
+differences, these estimates should not be interpreted as causal effects
+of the minimum-wage increase.
 
 ## 7. Figures
 
@@ -272,7 +277,7 @@ minimum-wage increase in Q1/2017.*
 
 <div class="figure">
 
-<img src="figures/continuous_event_studies.png" alt="*Continuous event-study estimates by labor-market outcome. Coefficients represent differences associated with a one-unit increase in the exposure proxy relative to Q2/2016; one unit corresponds to a €100 lower pre-treatment wage indicator. The dashed vertical line marks the beginning of the treatment period in Q3/2016, while the solid vertical line indicates implementation of the minimum-wage increase in Q1/2017. Error bars show 95% confidence intervals.*" width="100%" />
+<img src="figures/continuous_event_studies.png" alt="*Continuous event-study estimates by labor-market outcome. Coefficients represent differences associated with a one-unit increase in the exposure proxy relative to Q2/2016; one unit corresponds to a €100 lower pre-treatment wage indicator. The dashed vertical line marks the beginning of the treatment period in Q3/2016, while the solid vertical line indicates implementation of the minimum-wage increase in Q1/2017. Error bars show approximate 95% confidence intervals, calculated as the point estimate ± 1.96 times the AMR-clustered standard error.*" width="100%" />
 <p class="caption">
 
 *Continuous event-study estimates by labor-market outcome. Coefficients
@@ -281,7 +286,8 @@ exposure proxy relative to Q2/2016; one unit corresponds to a €100 lower
 pre-treatment wage indicator. The dashed vertical line marks the
 beginning of the treatment period in Q3/2016, while the solid vertical
 line indicates implementation of the minimum-wage increase in Q1/2017.
-Error bars show 95% confidence intervals.*
+Error bars show approximate 95% confidence intervals, calculated as the
+point estimate ± 1.96 times the AMR-clustered standard error.*
 </p>
 
 </div>
@@ -295,6 +301,7 @@ raw data, intermediate files, code, and generated figures.
 ├── README.md
 ├── README.Rmd
 ├── data_dictionary.md
+├── data_sources.md
 │
 ├── code/
 │   ├── analysis.R
@@ -304,10 +311,11 @@ raw data, intermediate files, code, and generated figures.
 │   ├── final/
 │   │   ├── Regression_AMR_2015_2018_Final.csv
 │   │   ├── AMR_2013_Proxy_Bonin.csv
-│   │   └── AMR_2013_Proxy_Bonin_README.txt
+│   │   └── AMR_2013_Proxy_Bonin_README.md
 │   │
 │   ├── intermediate/
 │   │   └── proxy/
+│   │       ├── BA_Kreismediane_2013.csv
 │   │       ├── BA_Kreise_2013_mit_Gewichte.csv
 │   │       ├── BA_Kreise_2015_mit_Gewichten.csv
 │   │       └── AMR_2015_beschaeftigungsgewichtet.xlsx
@@ -315,13 +323,13 @@ raw data, intermediate files, code, and generated figures.
 │   └── raw/
 │       ├── mappings/
 │       │   └── BBSR_Arbeitsmarktregionen_2017_Original.csv
-│       ├── population/
-│       │   ├── Bevölkerungszahlen 2015.csv
-│       │   └── Bevölkerungszahlen 2016-2018.csv
-│       └── wages/
-│           └── BA_Kreismediane_2013.csv
+│       └── population/
+│           ├── Bevölkerungszahlen 2015.csv
+│           └── Bevölkerungszahlen 2016-2018.csv
+│           
 │
 └── figures/
+    ├── proxy_validation.png
     ├── descriptive_trends.png
     ├── continuous_event_studies.png
     ├── eventstudy_regular.png
@@ -374,6 +382,10 @@ To reproduce the results:
 ``` r
 source("code/analysis.R") 
 ```
+
+The main script automatically loads the reusable helper functions
+contained in `code/functions.R`, so no additional script needs to be run
+separately.
 
 The script reads:
 

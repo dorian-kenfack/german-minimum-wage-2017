@@ -33,14 +33,16 @@ individuals who also hold a marginal side job. It does not cover all
 forms of employment, such as self-employment. Employment counts are
 measured at the place of work. Unemployment refers to the number of
 registered unemployed persons across both legal spheres (SGB II and SGB
-III). All outcomes are based on regional statistics published by the
-Federal Employment Agency.
+III).
 
 The labor market data were obtained primarily from the German Federal
 Employment Agency (Bundesagentur für Arbeit). Additional regional data
 were used to construct the minimum-wage exposure proxy and the control
 variables. The 2014 regional wage gap provided by Bonin et al. (2020) is
 used to validate the exposure proxy constructed for this project.
+
+A detailed description of the dataset structure and variable definitions
+is provided in the [data dictionary](data_dictionary.md).
 
 ## 3. Measuring Minimum-Wage Exposure
 
@@ -69,8 +71,8 @@ tend to exhibit smaller wage gaps and therefore lower minimum-wage
 exposure. This historical association provides supportive evidence for
 the use of the wage-based measure as a proxy for regional minimum-wage
 exposure. However, its transferability to the 2017 minimum-wage increase
-cannot be directly verified and therefore remains an identifying
-assumption.
+cannot be directly verified and therefore remains an assumption
+underlying the exposure measure.
 
 For a more intuitive interpretation of the continuous estimates, I
 reverse the sign of the proxy and rescale it into €100 units:
@@ -165,6 +167,28 @@ than post-treatment changes.
 
 ## 5. Identification and Parallel Trends
 
+*Continuous Event Study model*
+
+`ln(Yᵢₜ) = αᵢ + λₜ + Σ βₖ × [exposure_proxyᵢ × 𝟙(Quarterₜ = k)] + σᵢₜ + εᵢₜ`
+
+• k ≠ Q2/2016
+
+• Yᵢₜ: Outcome
+
+• αᵢ: AMR Fixed Effects
+
+• λₜ: Quarter Fixed Effects
+
+• σᵢₜ: Additional control terms
+
+• βₖ: Quarter-specific coefficients
+
+• 𝟙: Indicator variable equal to 1 in quarter k
+
+Interpretation of βₖ: Estimated relative difference in the outcome in
+quarter k, compared with the reference period Q2/2016, associated with a
+one-unit increase in exposure_proxy.
+
 For a causal interpretation of the DiD estimates, the parallel-trends
 assumption must be plausible. The descriptive plots initially show
 substantial level differences between the treatment and control groups,
@@ -200,28 +224,6 @@ therefore interpreted as associations between regional exposure and
 subsequent labor-market developments rather than causal effects of the
 minimum-wage increase.
 
-*Continuous Event Study model*
-
-`ln(Yᵢₜ) = αᵢ + λₜ + Σ βₖ × [exposure_proxyᵢ × 𝟙(Quarterₜ = k)] + σᵢₜ + εᵢₜ`
-
-• k ≠ Q2/2016
-
-• Yᵢₜ: Outcome
-
-• αᵢ: AMR Fixed Effects
-
-• λₜ: Quarter Fixed Effects
-
-• σ: Additional control terms
-
-• βₖ: Quarter-specific coefficients
-
-• 𝟙: Indicator variable equal to 1 in quarter k
-
-Interpretation of βₖ: Estimated relative difference in the outcome in
-quarter k, compared with the reference period Q2/2016, associated with a
-one-unit increase in exposure_proxy.
-
 ## 6. Main Results
 
 | Outcome | Binary DiD | Continuous DiD |
@@ -246,12 +248,14 @@ wage indicator.
 The employment estimates are small and negative in both specifications,
 but none is statistically significant at conventional significance
 levels (10%, 5%, or 1%). For unemployment, both specifications indicate
-a statistically significant negative association: approximately 2% for
-higher-exposure regions relative to lower-exposure regions in the binary
-model, and approximately 0.32% per €100 lower pre-treatment wage
-indicator in the continuous model. Given the documented pre-treatment
-differences, these estimates should not be interpreted as causal effects
-of the minimum-wage increase.
+a statistically significant negative association. In the binary model,
+unemployment declined by approximately 2% more in higher-exposure
+regions than in lower-exposure regions between the pre- and
+post-treatment periods. In the continuous model, a €100 lower
+pre-treatment wage indicator is associated with an approximately 0.32%
+larger decline in unemployment over the same periods. Given the
+documented pre-treatment differences, these estimates should not be
+interpreted as causal effects of the minimum-wage increase.
 
 ## 7. Figures
 
@@ -393,8 +397,8 @@ The script reads:
   quarterly AMR panel used for the main analysis.
 
 - `data/final/AMR_2013_Proxy_Bonin.csv`, used to validate the regional
-  wage-based exposure proxy against the 2014 wage gap from Bonin et al.
-  (2020).
+  wage-based exposure proxy against the 2014 wage gap from Bonin et
+  al. (2020).
 
 The script reproduces the binary and continuous DiD specifications,
 event-study models, pre-trend diagnostics, regression tables, and all
@@ -402,9 +406,9 @@ figures contained in the `figures/` directory.
 
 The files in `data/raw/` and `data/intermediate/` document the
 construction of the regional wage proxy and the underlying data sources.
-The current replication script starts from the prepared datasets in
-`data/final/`. The complete transformation from the original raw files
-to the final panel dataset is therefore not fully automated.
+The analysis script starts from the prepared datasets in `data/final/`.
+The complete transformation from the original raw files to the final
+panel dataset is therefore not fully automated.
 
 ## 10. Data Sources and Availability
 
@@ -419,7 +423,8 @@ The final datasets used directly in the analysis are included in
 `data/final/`. Selected raw and intermediate files are provided to
 document the construction of the regional exposure proxy. Original
 source files remain subject to the terms and conditions of their
-respective data providers.
+respective data providers and are therefore not necessarily included in
+the repository.
 
 ## 11. Limitations
 
@@ -450,6 +455,7 @@ effects on regional employment and unemployment. Journal of Economics
 and Statistics, 240(2–3), 295–319.
 [<u>https://doi.org/10.1515/jbnst-2018-0067</u>](https://doi.org/10.1515/jbnst-2018-0067)
 
-Additional data sources include the German Federal Employment Agency
+Additional data were obtained from the German Federal Employment Agency
 (Bundesagentur für Arbeit) and the Federal Institute for Research on
-Building, Urban Affairs and Spatial Development (BBSR).
+Building, Urban Affairs and Spatial Development (BBSR). Detailed source
+documentation is provided in [`data_sources.md`](data_sources.md).

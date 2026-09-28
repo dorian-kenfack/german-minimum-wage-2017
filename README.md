@@ -420,9 +420,7 @@ use, and original source links is provided in
 
 The final datasets used directly in the analysis are included in
 `data/final/`. Selected raw and intermediate files are provided to
-document the construction of the regional exposure proxy. Original
-source files remain subject to the terms and conditions of their
-respective data providers.
+document the construction of the regional exposure proxy. Original source files remain subject to the terms and conditions of their respective data providers and are therefore not necessarily included in the repository.
 
 ## 11. Limitations
 

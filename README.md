@@ -453,6 +453,7 @@ effects on regional employment and unemployment. Journal of Economics
 and Statistics, 240(2–3), 295–319.
 [<u>https://doi.org/10.1515/jbnst-2018-0067</u>](https://doi.org/10.1515/jbnst-2018-0067)
 
-Additional data sources include the German Federal Employment Agency
-(Bundesagentur für Arbeit) and the Federal Institute for Research on
-Building, Urban Affairs and Spatial Development (BBSR).
+Additional data were obtained from the German Federal Employment Agency
+(Bundesagentur für Arbeit) and the Federal Institute for Research on Building,
+Urban Affairs and Spatial Development (BBSR). Detailed source documentation is
+provided in [`data_sources.md`](data_sources.md).

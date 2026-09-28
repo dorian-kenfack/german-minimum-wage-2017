@@ -42,6 +42,9 @@ were used to construct the minimum-wage exposure proxy and the control
 variables. The 2014 regional wage gap provided by Bonin et al. (2020) is
 used to validate the exposure proxy constructed for this project.
 
+A detailed description of the dataset structure and variable definitions is provided in the
+[data dictionary](data_dictionary.md).
+
 ## 3. Measuring Minimum-Wage Exposure
 
 A measure of regional minimum-wage exposure is required because the 2017
